@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
 import permisoRoutes from "./routes/permisoRoutes.js";
+import permisoPdf from "./routes/permisoPdf.js";
 
 const app = express();
 app.use(express.json());//permitir el req.body
@@ -30,6 +31,7 @@ app.use(cors(corsOptions));
 // Routing
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/permisos', permisoRoutes);
+app.use('/api/permisopdf', permisoPdf);
 
 const PORT = process.env.PORT || 4000;
 

@@ -5,7 +5,8 @@ import {
   obtenerPermisos,
   obtenerPermiso,
   modificarPermiso,
-  eliminarPermiso
+  eliminarPermiso,
+  descargarPermisoPDF
 } from '../controllers/permisoController.js';
 import checkOut from '../middleware/checkAuth.js';
 
@@ -19,6 +20,7 @@ router.route('/').get(checkOut, obtenerPermisos)
 router.route('/:id').get(checkOut, obtenerPermiso)
                     .put(checkOut, modificarPermiso)
                     .delete(checkOut, eliminarPermiso);
+                    // .patch(checkOut, descargarPermisoPDF);
 
 export default router;
 
