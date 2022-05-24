@@ -136,10 +136,74 @@ const nuevoPassword = async (req, res) => {
 
 }
 
+
+const obtenerUsuario = async (req,res)=>{
+
+  const {id} = req.params
+
+  const usuario = await Usuario.findById(id).select('-password -token -confirmado -rol -__v -createdAt -updatedAt');
+
+  if (!usuario) {
+    const error = new Error('Usuario no encontrado');
+    return res.status(404).json({ msg: error.message });
+  }
+
+  if (usuario._id.toString() !== id) {
+    const error = new Error('No tienes los permisos necesarios');
+
+    return res.status(404).json({ msg: error.message });
+
+  }
+
+  // console.log(usuario);
+  res.status(200).json(usuario);
+
+}
+
+
 const perfil = async (req, res) => {
   const {usuario}= req;
   res.json(usuario);
 }
+
+const actualizarUsuario = async (req, res) => {
+  // Evitar registros duplicados
+  const { nombre,password,email,departamento,rol,turno,tarjeta,_id } = req.body;
+  console.log(req.body);
+
+  try {
+    const UsuarioDb = await Usuario.findById(_id);
+    // console.log(existeUsuario)
+    if (!UsuarioDb) {
+      const error = new Error("No existe el usuario");
+      return res.status(400).json({ msg: error.message });
+    }
+  
+    if (UsuarioDb._id.toString() !== _id) {
+      const error = new Error('No tienes los permisos necesarios');
+  
+      return res.status(404).json({ msg: error.message });
+    }
+  
+    UsuarioDb.nombre =nombre || UsuarioDb.nombre;
+    UsuarioDb.email = email || UsuarioDb.email;
+    UsuarioDb.departamento = departamento || UsuarioDb.departamento;
+    UsuarioDb.rol = rol || UsuarioDb.rol;
+    UsuarioDb.turno = turno || UsuarioDb.turno;
+    UsuarioDb.tarjeta = tarjeta || UsuarioDb.tarjeta;
+    
+    const usuarioGuardado = await UsuarioDb.save();
+
+    res.json(usuarioGuardado);
+    
+  } catch (error) {
+    return res.status(500).json({ msg: error.message });  
+  }
+  
+  
+ 
+
+};
 
 export {
   registrar,
@@ -149,4 +213,6 @@ export {
   comprobarToken,
   nuevoPassword,
   perfil,
+  obtenerUsuario,
+  actualizarUsuario
 };

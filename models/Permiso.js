@@ -23,7 +23,8 @@ const permisoSchema = new mongoose.Schema({
   //   default:Date.now()
   // },
   fechaCreacion:{
-    type:Date,
+    type:String,
+    
     // required:true,
     default:Date.now()
   },

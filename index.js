@@ -1,4 +1,5 @@
 import express from "express";
+
 import conectarDB from "./config/db.js";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -27,6 +28,10 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
+
+// Rutas
+
+
 
 // Routing
 app.use('/api/usuarios', usuarioRoutes);

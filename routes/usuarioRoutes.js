@@ -1,5 +1,5 @@
 import express from "express";
-import {registrar,autenticar,confirmar, olvidePassword,comprobarToken,nuevoPassword,perfil} from "../controllers/usuarioController.js";
+import {registrar,autenticar,confirmar, olvidePassword,comprobarToken,nuevoPassword,perfil,obtenerUsuario,actualizarUsuario} from "../controllers/usuarioController.js";
 const router = express.Router();
 import checkOut from '../middleware/checkAuth.js';
 
@@ -15,6 +15,8 @@ router.post('/olvide-password',olvidePassword);
 router.route('/olvide-password/:token').get(comprobarToken).post(nuevoPassword);
 
 router.get('/perfil',checkOut,perfil)
+router.get('/obtener-usuario/:id',checkOut,obtenerUsuario)
+router.put('/actualizar-usuario',checkOut,actualizarUsuario)
 
 
 

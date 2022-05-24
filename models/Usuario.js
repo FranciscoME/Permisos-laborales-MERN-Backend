@@ -28,7 +28,7 @@ const usuarioSchema = new mongoose.Schema({
   },
   rol:{
     type:String,
-    default:"usuario",
+    default:"operativo",
   },
   turno:{
     type:String,
