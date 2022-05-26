@@ -10,7 +10,6 @@ import permisoPdf from "./routes/permisoPdf.js";
 const app = express();
 app.use(express.json());//permitir el req.body
 dotenv.config();//cargar variables de entorno
-
 conectarDB();
 
 // CORS
@@ -40,7 +39,6 @@ app.use('/api/permisopdf', permisoPdf);
 
 const PORT = process.env.PORT || 4000;
 
-console.log('desde index.js')
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 })

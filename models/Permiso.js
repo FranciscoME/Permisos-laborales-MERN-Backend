@@ -25,7 +25,7 @@ const permisoSchema = new mongoose.Schema({
   fechaCreacion:{
     type:String,
     
-    // required:true,
+  // required:true,
     default:Date.now()
   },
   fechas:[{
