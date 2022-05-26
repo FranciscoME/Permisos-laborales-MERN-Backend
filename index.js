@@ -17,10 +17,13 @@ const whitelist = [process.env.FRONTEND_URL];
 
 const corsOptions = {
     origin: function (origin, callback) {
+        console.log('origen: ',whitelist);
         if (whitelist.includes(origin)) {
+            console.log('paso cors')
             callback(null, true);
         }
         else {
+            console.log('denegado por cors')
             callback(new Error('error de cors'));
         }
     }
