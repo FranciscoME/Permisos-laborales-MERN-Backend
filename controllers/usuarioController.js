@@ -29,6 +29,7 @@ const registrar = async (req, res) => {
 
 const autenticar = async (req, res) => {
   const { email, password } = req.body;
+  console.log(req.body);
   // Comprobar si el usuario existe
   const usuario = await Usuario.findOne({ email });
 
