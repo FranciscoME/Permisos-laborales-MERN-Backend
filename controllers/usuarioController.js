@@ -5,6 +5,7 @@ import generarJWT from "../helpers/generarJWT.js";
 const registrar = async (req, res) => {
   // Evitar registros duplicados
   const { email } = req.body;
+  console.log(req.body);
   const existeUsuario = await Usuario.findOne({ email });
   if (existeUsuario) {
     const error = new Error("Usario ya existe");
