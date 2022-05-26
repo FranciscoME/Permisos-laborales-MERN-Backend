@@ -162,6 +162,7 @@ const descargarPermisoPDF = async (req, res) => {
   <html style="zoom: 0.75;
   border: 1px solid black;
   background-color: aliceblue;">
+  <div style="border:1px solid black;">
 
     <div style="display: -webkit-flex; -webkit-flex-direction: row;">
     <img src='${img}' alt="logo-hospital" width="80" height="80" style="display: inline; margin-left: 15px; margin-top: 10px;float:left;">
@@ -211,7 +212,7 @@ const descargarPermisoPDF = async (req, res) => {
       <p style="border-top: 1px solid black; display:inline-block; text-align: center; margin-left:1cm;">Jefe inmediato</p>
       <p style="border-top: 1px solid black; display:inline-block; text-align: center; margin-left:10cm;">Jefe de Recursos Humanos</p>
     </div>
-    
+   </div>
   </html>
 
 
