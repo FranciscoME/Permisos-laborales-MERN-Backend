@@ -159,7 +159,7 @@ const descargarPermisoPDF = async (req, res) => {
   const base = `file://${cwd}/assets/psiq.png`;
   let img = path.normalize(base);
   const content = `
-  <div style="
+  <html style="zoom: 0.75;">
   border: 1px solid black;
   background-color: aliceblue;">
 
@@ -212,7 +212,7 @@ const descargarPermisoPDF = async (req, res) => {
       <p style="border-top: 1px solid black; display:inline-block; text-align: center; margin-left:10cm;">Jefe de Recursos Humanos</p>
     </div>
     
-  </div>
+  </html>
 
 
 
