@@ -156,7 +156,7 @@ const descargarPermisoPDF = async (req, res) => {
   const base = `file://${cwd}/assets/psiq.png`;
   let img = path.normalize(base);
   const content = `
-  <html style="zoom: 0.75;
+  <html style="zoom: 0.50;
   border: 1px solid black;
   background-color: aliceblue;">
   <div style="border:1px solid black;">
