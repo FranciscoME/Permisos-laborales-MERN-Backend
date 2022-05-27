@@ -1,10 +1,8 @@
 import { generarPDF } from "../helpers/generarPDF.js";
 import Permiso from "../models/Permiso.js";
-import pdf from 'html-pdf';
-import { formatearFecha, formatearFechaCompleta } from "../helpers/formatearFecha.js";
+import { fechasATexto, formatearFecha } from "../helpers/formatearFecha.js";
 // import PDFDocument from 'pdfkit'
 import path from "path";
-import fs from "fs";
 
 
 const nuevoPermiso = async (req, res) => {
@@ -137,7 +135,6 @@ const eliminarPermiso = async (req, res) => {
 
 const descargarPermisoPDF = async (req, res) => {
   const { id } = req.params;
-  console.log('En imprimir recibo!!!!!!!!')
   // console.log(req.usuario);
 
   const permiso = await Permiso.findById(id).populate('creador');
@@ -192,10 +189,10 @@ const descargarPermisoPDF = async (req, res) => {
     <div style="line-height: 16px;">
       <p style ='font-weight: bold; font-size: 16px;text-align:center;'>Fechas solicitadas</p>      
       <p style="width: 85%; height: auto; border: 1px solid black; margin-left:auto ; margin-right: auto;">
-      ${permiso.fechas.map(fecha => (
-    `<span> ${formatearFecha(fecha)}</span>`
-  ))
-    }
+      
+      ${fechasATexto(permiso.fechas)}
+      
+      
       
       </p>
     </div>   
@@ -251,10 +248,8 @@ const descargarPermisoPDF = async (req, res) => {
     <div style="line-height: 16px;">
       <p style ='font-weight: bold; font-size: 16px;text-align:center;'>Fechas solicitadas</p>      
       <p style="width: 85%; height: auto; border: 1px solid black; margin-left:auto ; margin-right: auto;">
-      ${permiso.fechas.map(fecha => (
-      `<span> ${formatearFecha(fecha)}</span>`
-    ))
-    }
+
+      ${fechasATexto(permiso.fechas)}
       
       </p>
     </div>   
@@ -274,13 +269,6 @@ const descargarPermisoPDF = async (req, res) => {
     
   </div>
 
-
-
-  
-
-  
-
-
   
   `;
 
@@ -289,30 +277,10 @@ const descargarPermisoPDF = async (req, res) => {
   }
 
 
-  // pdf.create(content).toFile('./html-pdf.pdf', function (err, res) {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     console.log(res);
-  //   }
-  // });
-
-  // res.sendFile('./html-pdf.pdf' , { root : __dirname});
-
-  // return new Promise((resolve, reject) => {
   const stream = await generarPDF(content, options);
   res.contentType('application/pdf');
 
-  res.writeHead(200, {
-    'Content-Type': 'application/pdf',
-    'Content-disposition': `attachment; filename=test.pdf`,
-  });
-
   stream.pipe(res, { end: true });
-
-
-
-
 }
 
 

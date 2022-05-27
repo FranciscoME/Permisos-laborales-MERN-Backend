@@ -12,9 +12,7 @@ const generarPDF = (contentpdf) => {
     pdf.create(contentpdf).toStream((err, stream) => {
       if (err) {
         return reject(err);
-      }
-
-      
+      }     
       
       resolve(stream);
     });
