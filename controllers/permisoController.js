@@ -162,7 +162,11 @@ const descargarPermisoPDF = async (req, res) => {
 
 
   const content = `
+<<<<<<< HEAD
   <html style="zoom: 0.70;
+=======
+  <html style="zoom: 0.65;
+>>>>>>> fd4a3894e6e6c6bfc8abe20ce1dbb48e8dd4d838
   border: 1px solid black;
   background-color: aliceblue;">
   <div style="border:1px solid black;">
