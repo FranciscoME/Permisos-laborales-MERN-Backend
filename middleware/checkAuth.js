@@ -10,7 +10,7 @@ const checkOut = async(req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token,process.env.JWT_SECRET);
       
-      req.usuario = await Usuario.findById(decoded.id).select('-password -confirmado -token -createdAt -updatedAt -departamento -__v');
+      req.usuario = await Usuario.findById(decoded.id).select('-password -confirmado -token -createdAt -updatedAt -departamento -__v ');
     } catch (error) {
       return res.status(404).json({ msg: "hubo un error en el servidor" });
     }

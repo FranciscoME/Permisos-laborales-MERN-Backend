@@ -25,7 +25,8 @@ const formatearFechaCompleta = (fecha) => {
 
 
 const fechasATexto = (fechas)=>{
-  
+  console.log('modificarFecha: ',fechas[0].toISOString().split('T')[0]);
+  // toISOString().split('T')[0]
 
   const meses = [
     "Enero", "Febrero", "Marzo",
@@ -36,13 +37,13 @@ const fechasATexto = (fechas)=>{
   const dias=['D','L','Ma','Mi','J','V','S']
   
   
-  let mesPosicionAnterior=fechas[0].split('/')[1];
+  let mesPosicionAnterior=fechas[0].toISOString().split('T')[0].split('-')[1];
   let textoFechas='';
   fechas.forEach((fecha,index)=>{
      let diaFecha = new Date(fecha).getDay();
-      let mes= fecha.split('/')[1]
-      let dia = fecha.split('/')[2]
-      let anio = fecha.split('/')[0]
+      let mes= fecha.toISOString().split('T')[0].split('-')[1]
+      let dia = fecha.toISOString().split('T')[0].split('-')[2]
+      let anio = fecha.toISOString().split('T')[0].split('-')[0]
       if(mesPosicionAnterior===mes){
       textoFechas +=  dias[diaFecha] +' '+ dia +', '
       }else{

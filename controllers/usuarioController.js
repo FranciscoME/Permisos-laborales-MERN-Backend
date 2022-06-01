@@ -50,6 +50,8 @@ const autenticar = async (req, res) => {
         _id: usuario._id,
         nombre: usuario.nombre,
         email: usuario.email,
+        rol: usuario.rol,
+        turno:usuario.turno,
         token: generarJWT(usuario._id),
       })
     }
@@ -180,7 +182,7 @@ const perfil = async (req, res) => {
 const actualizarUsuario = async (req, res) => {
   // Evitar registros duplicados
   const { nombre,password,email,departamento,rol,turno,tarjeta,_id } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
 
   try {
     const UsuarioDb = await Usuario.findById(_id);

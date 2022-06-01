@@ -3,6 +3,7 @@ import Permiso from "../models/Permiso.js";
 import { fechasATexto, formatearFecha } from "../helpers/formatearFecha.js";
 // import PDFDocument from 'pdfkit'
 import path from "path";
+import { obtenerFechaInicioDeMes, obtenerFechaFinDeMes, obtenerFechaInicioAnio, obtenerFechaFinAnio } from "../helpers/operacionesFechas.js";
 
 
 const nuevoPermiso = async (req, res) => {
@@ -19,13 +20,12 @@ const nuevoPermiso = async (req, res) => {
 }
 
 const obtenerPermisos = async (req, res) => {
-  console.log('obtener permisos:')
-  console.log(req.query)
+  // console.log('obtener permisos:')
+  // console.log(req.query)
   // const {limite=1, desde=0} = req.query;
   let desde = req.query.desde || 0;
   let limite = req.query.limite || 5;
-  console.log(desde)
-  console.log(limite)
+
 
   // const permisos =
   //   await Permiso.find().sort({ 'createdAt': -1 }).where('creador').
@@ -151,12 +151,18 @@ const descargarPermisoPDF = async (req, res) => {
     return res.status(404).json({ msg: error.message });
   }
 
+  // const fechaCreacion = permiso.fechas[0].toISOString().split('T')[0];
+  // console.log(fechaCreacion)
+
 
   const cwd = process.cwd();
   const base = `file://${cwd}/assets/psiq.png`;
   let img = path.normalize(base);
+
+
+
   const content = `
-  <html style="zoom: 0.50;
+  <html style="zoom: 0.70;
   border: 1px solid black;
   background-color: aliceblue;">
   <div style="border:1px solid black;">
@@ -198,7 +204,7 @@ const descargarPermisoPDF = async (req, res) => {
     </div>   
 
     <div style="text-align: center; line-height: 10px;">
-      <p style="font-weight: bold;">Fecha de solicitud: <span style="font-weight: normal;"> ${formatearFecha(permiso.fechaCreacion)} </span></p>
+      <p style="font-weight: bold;">Fecha de solicitud: <span style="font-weight: normal;"> ${formatearFecha(permiso.fechaCreacion.toISOString().split('T')[0])} </span></p>
       <p style="font-weight: bold;">Turno: <span style="font-weight: normal;"> ${permiso.creador.turno}</span></p>
       <p style="font-weight: bold;">Tarjeta No. <span style="font-weight: normal;">${permiso.creador.tarjeta}</span></p>
     </div>
@@ -209,16 +215,16 @@ const descargarPermisoPDF = async (req, res) => {
       <p style="border-top: 1px solid black; display:inline-block; text-align: center; margin-left:1cm;">Jefe inmediato</p>
       <p style="border-top: 1px solid black; display:inline-block; text-align: center; margin-left:10cm;">Jefe de Recursos Humanos</p>
     </div>
-   </div>
-  </html>
+   </div>   
 
 
 
+   
+   <!--              Segunda papeleta                                          -->
 
 
-  <div style="
-  border: 1px solid black;
-  background-color: aliceblue;">
+
+  <div style="border:1px solid black;">
 
     <div style="display: -webkit-flex; -webkit-flex-direction: row;">
     <img src='${img}' alt="logo-hospital" width="80" height="80" style="display: inline; margin-left: 15px; margin-top: 10px;float:left;">
@@ -248,14 +254,16 @@ const descargarPermisoPDF = async (req, res) => {
     <div style="line-height: 16px;">
       <p style ='font-weight: bold; font-size: 16px;text-align:center;'>Fechas solicitadas</p>      
       <p style="width: 85%; height: auto; border: 1px solid black; margin-left:auto ; margin-right: auto;">
-
+      
       ${fechasATexto(permiso.fechas)}
+      
+      
       
       </p>
     </div>   
 
     <div style="text-align: center; line-height: 10px;">
-      <p style="font-weight: bold;">Fecha de solicitud: <span style="font-weight: normal;"> ${formatearFecha(permiso.fechaCreacion)} </span></p>
+      <p style="font-weight: bold;">Fecha de solicitud: <span style="font-weight: normal;"> ${formatearFecha(permiso.fechaCreacion.toISOString().split('T')[0])} </span></p>
       <p style="font-weight: bold;">Turno: <span style="font-weight: normal;"> ${permiso.creador.turno}</span></p>
       <p style="font-weight: bold;">Tarjeta No. <span style="font-weight: normal;">${permiso.creador.tarjeta}</span></p>
     </div>
@@ -266,10 +274,14 @@ const descargarPermisoPDF = async (req, res) => {
       <p style="border-top: 1px solid black; display:inline-block; text-align: center; margin-left:1cm;">Jefe inmediato</p>
       <p style="border-top: 1px solid black; display:inline-block; text-align: center; margin-left:10cm;">Jefe de Recursos Humanos</p>
     </div>
-    
-  </div>
+   </div>   
+   
 
-  
+
+
+
+
+   </html>  
   `;
 
   const options = {
@@ -284,11 +296,48 @@ const descargarPermisoPDF = async (req, res) => {
 }
 
 
+const obtenerDatosGeneralesPermisos = async (req, res) => {
+
+
+  const primerDiaMes = obtenerFechaInicioDeMes()
+  const ultimoDiaMes = obtenerFechaFinDeMes()
+  const primerDiaAnio = obtenerFechaInicioAnio();
+  const ultimoDiaAnio = obtenerFechaFinAnio();
+  
+
+  const [pasesSalida, economicos] = await Promise.all([
+
+
+    // TODO: consulta no regresa el primer registro del primer dia del mes
+    Permiso
+      .where('creador').equals(req.usuario)
+      .where('concepto').equals('Pase de salida sin retorno')
+      .where('eliminado').equals(false)
+      .find({ fechas: { $gte: primerDiaMes, $lte: ultimoDiaMes } }).countDocuments(),
+
+    // TODO: consulta no regresa todos los permisos del anio   
+    Permiso.where('creador').equals(req.usuario)
+      .where('concepto').equals('Permiso economico')
+      .where('eliminado').equals(false)
+      .find({ fechas: { $gte: primerDiaAnio, $lte: ultimoDiaAnio } })
+  ]);
+
+  let totalEconomicos=0;
+  economicos.forEach(economico => {
+    totalEconomicos+=economico.fechas.length
+  });
+
+  res.json({ pasesSalida, economicos: totalEconomicos });
+
+}
+
+
 export {
   nuevoPermiso,
   obtenerPermisos,
   obtenerPermiso,
   modificarPermiso,
   eliminarPermiso,
-  descargarPermisoPDF
+  descargarPermisoPDF,
+  obtenerDatosGeneralesPermisos
 }

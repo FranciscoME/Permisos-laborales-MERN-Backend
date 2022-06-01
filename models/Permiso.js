@@ -23,13 +23,14 @@ const permisoSchema = new mongoose.Schema({
   //   default:Date.now()
   // },
   fechaCreacion:{
-    type:String,
+    type:Date,
     
   // required:true,
     default:Date.now()
   },
   fechas:[{
-    type:String,
+    type:Date,
+    // type:Object
   }],
   creador:{
     type:mongoose.Schema.Types.ObjectId,
